@@ -11,7 +11,7 @@ Bench = Class.new
 if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'rbx'
   class StringScanner
     def initialize(string, dup=false)
-      @string = StringValue(string)  # fix for issue
+      @string = StringValue(string)  # fix for issue 696: https://github.com/evanphx/rubinius/issues/#issue/696
       reset_state
     end
   end
