@@ -1,0 +1,29 @@
+#!/usr/bin/env ruby
+
+require 'benchmark'
+require 'strscan'
+
+MY_DIR = File.dirname(__FILE__)
+$LOAD_PATH.unshift MY_DIR
+
+Bench = Class.new
+
+if defined?(RUBY_ENGINE) && RUBY_ENGINE == 'rbx'
+  class StringScanner
+    def initialize(string, dup=false)
+      @string = StringValue(string)  # fix for issue
+      reset_state
+    end
+  end
+end
+
+Benchmark.bm 30 do |bm|
+  Dir.chdir MY_DIR do
+    for benchmark in Dir['bm_*.rb'].sort
+      load benchmark
+      bm.report File.basename(benchmark)[/\Abm_(.*?)\.rb/, 1] do
+        Bench.run
+      end
+    end
+  end
+end
