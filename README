@@ -1,6 +1,3 @@
-Well…
-=====
-
     [01:25] murphy_karasu: the blog mentions something about 2x as fast as 1.9.2 I think?
     [01:25] brixen: yes, on *pure* Ruby code
     [01:26] brixen: murphy_karasu: in MRI, Array, Hash, String, etc are all C code
