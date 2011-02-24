@@ -1,1 +1,4 @@
-Run run.
+Run this:
+
+ruby run [name of benchmark]
+
