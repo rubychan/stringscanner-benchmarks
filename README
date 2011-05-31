@@ -1,20 +1,31 @@
-    ruby run [name of benchmark] [--times N] [--repeat R]
+Run:
 
---times runs the example N times inside of the benchmark
---repeat repeats the whole benchmark R times
+    ruby run [name of example] [--repeat R] [--times N]
+
+--repeat repeats each benchmark R times
+--times runs the examples N times inside of the benchmark
 
 To run all benchmarks:
 
     ruby run
 
+To run the create benchmark 3 times:
+
+    ruby run create --repeat 3
+
+To benchmark running the create example 3 times:
+
+    ruby run create --times 3
+
 For multi-core benchmarks, run:
 
     ruby run 'multi*' --input [size in MB] --chunks [chunk size in lines]
 
-To reproduce EuRuKo 2011 results[1] run: (takes some minutes)
+Default input size is 3 MB.
+Default chunk size is 5,000 lines.
 
-    ruby run 'multi*' --repeat 3 --input 160 --chunks 300000
+To reproduce EuRuKo 2011 results[1] run: (takes several minutes)
 
-For JRuby, use -J-Xmx2g to increase maximum heap size.
+    ruby run multi-slice --repeat 3 --input 160 --chunks 300000
 
 [1] as presented in http://rubychan.de/share/supersonic-euruko-2011.pdf
