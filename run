@@ -8,7 +8,7 @@ $LOAD_PATH.unshift MY_DIR
 
 Bench = Class.new
 
-# require 'strscan2'
+puts "#{RUBY_ENGINE rescue 'ruby'} #{RUBY_VERSION} #{RUBY_RELEASE_DATE}"
 
 Benchmark.bm 30 do |bm|
   Dir.chdir MY_DIR do
