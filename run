@@ -6,17 +6,28 @@ require 'strscan'
 MY_DIR = File.dirname(__FILE__)
 $LOAD_PATH.unshift MY_DIR
 
-Bench = Class.new
-
 puts "#{RUBY_ENGINE rescue 'ruby'} #{RUBY_VERSION} #{RUBY_RELEASE_DATE}"
+
+class Bench
+  def run
+    # define benchmark here
+  end
+  def info
+    # define additional information to be printed after the benchmark here
+  end
+end
 
 Benchmark.bm 30 do |bm|
   Dir.chdir MY_DIR do
-    for benchmark in Dir["strscan/bm_#{ARGV.first || '*'}.rb"].sort
+    for benchmark in Dir["strscan/**/bm_#{ARGV.grep(/^[a-z]/).first}*.rb"].sort
       load benchmark
       bm.report File.basename(benchmark)[/\Abm_(.*?)\.rb/, 1] do
-        Bench.run
+        (ARGV.join(' ')[/--times (\d+)/, 1] || 1).to_i.times do
+          Bench.run
+        end
       end
+      Bench.info
+      puts
     end
   end
 end
