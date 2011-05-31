@@ -15,4 +15,6 @@ To reproduce EuRuKo 2011 results[1] run: (takes some minutes)
 
     ruby run 'multi*' --repeat 3 --input 160 --chunks 300000
 
+For JRuby, use -J-Xmx2g to increase maximum heap size.
+
 [1] as presented in http://rubychan.de/share/supersonic-euruko-2011.pdf
