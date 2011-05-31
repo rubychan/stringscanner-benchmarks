@@ -11,6 +11,8 @@ require 'bench'
 times  = (ARGV.join(' ')[/--times (\d+)/, 1] || 1).to_i
 repeat = (ARGV.join(' ')[/--repeat (\d+)/, 1] || 1).to_i
 
+puts "#{RUBY_ENGINE rescue 'ruby'} #{RUBY_VERSION} #{RUBY_RELEASE_DATE}"
+
 Benchmark.bm 30 do |bm|
   Dir.chdir MY_DIR do
     for benchmark in Dir["strscan/**/bm_#{ARGV.grep(/^[a-z]/).first || '*'}.rb"].sort
