@@ -12,12 +12,14 @@ $stdout.sync = true
 class MultiThreadBenchmark < Struct.new :name, :input, :chunk_size
   
   # EuRuKo 2011 defaults
-  DEFAULT_INPUT_SIZE_MB  = 160
-  DEFAULT_CHUNK_SIZE_LOC = 300_000
+  # DEFAULT_INPUT_SIZE_MB  = 160
+  # DEFAULT_CHUNK_SIZE_LOC = 300_000
   
-  INPUT_SEED = "2011 alpha, beta, (gamma), delta.\n"
+  # more modest defaults
+  DEFAULT_INPUT_SIZE_MB  = 3
+  DEFAULT_CHUNK_SIZE_LOC = 5_000
   
-  ALL_TIMES    = 1
+  ALL_TIMES    = 2
   SINGLE_TIMES = 2
   MULTI_TIMES  = 2
   
@@ -30,6 +32,9 @@ class MultiThreadBenchmark < Struct.new :name, :input, :chunk_size
         def (::Bench).run
           MultiThreadBenchmark.last_instance.run
         end
+        def (::Bench).info
+          MultiThreadBenchmark.last_instance.info
+        end
       end
       
       @last_instance
@@ -41,10 +46,8 @@ class MultiThreadBenchmark < Struct.new :name, :input, :chunk_size
   end
   
   def generate_input
-    input_size = ((ARGV[0] || DEFAULT_INPUT_SIZE_MB).to_f * 1_000_000).to_i
-    input = INPUT_SEED * (input_size.to_f / INPUT_SEED.size).ceil
-    input.slice! input_size..-1
-    input
+    input_size = ((ARGV.join(' ')[/--input (\d+)/, 1] || DEFAULT_INPUT_SIZE_MB).to_f * 1_000_000).to_i
+    SimpleScanner.generate_input input_size
   end
   
   def input
@@ -52,12 +55,12 @@ class MultiThreadBenchmark < Struct.new :name, :input, :chunk_size
   end
   
   def chunk_size
-    @chunk_size ||= (ARGV[1] || DEFAULT_CHUNK_SIZE_LOC).to_i
+    @chunk_size ||= (ARGV.join(' ')[/--chunks (\d+)/, 1] || DEFAULT_CHUNK_SIZE_LOC).to_i
   end
   
   def run
-    print '...'
-    puts
+    @info = []
+    m = s = 0
     
     ALL_TIMES.times do
       MULTI_TIMES.times do
@@ -71,7 +74,7 @@ class MultiThreadBenchmark < Struct.new :name, :input, :chunk_size
         end
         
         mb = input.size / 1_000_000.0
-        puts 'Multi-Threaded: %0.1f MB in %0.2fs = %0.1f MB/s @ %d threads' % [mb, seconds, mb / seconds, threads.size]
+        @info << "Multi-Threaded (#{m += 1}): %0.1f MB in %0.2fs = %0.1f MB/s @ %d threads" % [mb, seconds, mb / seconds, threads.size]
       end
       
       SINGLE_TIMES.times do
@@ -80,9 +83,13 @@ class MultiThreadBenchmark < Struct.new :name, :input, :chunk_size
         end
         
         mb = input.size / 1_000_000.0
-        puts 'Single-Threaded: %0.1f MB in %0.2fs = %0.1f MB/s' % [mb, seconds, mb / seconds]
+        @info << "Single-Threaded (#{s += 1}): %0.1f MB in %0.2fs = %0.1f MB/s" % [mb, seconds, mb / seconds]
       end
     end
+  end
+  
+  def info
+    puts @info
   end
   
   def do_multi threads

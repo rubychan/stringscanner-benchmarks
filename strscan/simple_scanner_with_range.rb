@@ -1,7 +1,7 @@
 require 'strscan'
 
 # a simple scanner with 9 rules and an optional range options
-class SimpleScannerWithRange < StringScanner
+class SimpleScannerWithRange < SimpleScanner
   def initialize code, range = 0...code.bytesize
     super code
     @start = range.begin
@@ -10,8 +10,7 @@ class SimpleScannerWithRange < StringScanner
   
   def tokenize encoder
     self.pos = @start
-    scan_tokens encoder
-    encoder
+    super
   end
   
   def scan_tokens encoder

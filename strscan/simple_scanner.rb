@@ -2,6 +2,14 @@ require 'strscan'
 
 # a simple scanner with 9 rules
 class SimpleScanner < StringScanner
+  INPUT_SEED = "2011 alpha, beta, (gamma), delta.\n"
+  
+  def self.generate_input input_size
+    input = INPUT_SEED * (input_size.to_f / INPUT_SEED.size).ceil
+    input.slice! input_size..-1
+    input
+  end
+  
   def tokenize encoder
     scan_tokens encoder
     encoder
