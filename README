@@ -1,13 +1,13 @@
 Run this:
 
-    ruby run [name of benchmark] --times N --repeat R
+    ruby run [name of benchmark] [--times N] [--repeat R]
 
 --times runs the example N times inside of the benchmark
 --repeat repeats the whole benchmark R times
 
 For Multi-Core benchmarks, run:
 
-    ruby run [name of benchmark] 'multi*' --times N --input [size in MB] --chunks [chunk size in lines]
+    ruby run [name of benchmark] 'multi*' --input [size in MB] --chunks [chunk size in lines]
 
 To reproduce EuRuKo 2011 results[1] run (takes some minutes):
 
