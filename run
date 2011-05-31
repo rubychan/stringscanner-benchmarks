@@ -24,15 +24,15 @@ Benchmark.bm 30 do |bm|
       bench = Bench.last_instance
       name = File.basename(benchmark)[/\Abm_(.*?)\.rb/, 1]
       
-      bench.before
       repeat.times do |i|
+        bench.before
         bm.report name + ":#{i + 1 if repeat > 1}" do
           times.times do
             bench.run
           end
         end
+        bench.after
       end
-      bench.after
       puts
     end
   end
