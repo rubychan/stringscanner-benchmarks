@@ -1,4 +1,13 @@
 Run this:
 
-ruby run [name of benchmark]
+    ruby run [name of benchmark] --times N
 
+For Multi-Core benchmarks, run:
+
+    ruby run [name of benchmark] 'multi*' --times N --input [size in MB] --chunks [chunk size in lines]
+
+To reproduce EuRuKo 2011 results[1] run:
+
+    ruby run [name of benchmark] 'multi*' --times 3 --input 160 --chunks 300000
+
+[1] as presented in http://rubychan.de/share/supersonic-euruko-2011.pdf
