@@ -10,7 +10,7 @@ Bench = Class.new
 
 Benchmark.bm 30 do |bm|
   Dir.chdir MY_DIR do
-    for benchmark in Dir['strscan/**/bm_*.rb'].sort
+    for benchmark in Dir["strscan/**/bm_#{ARGV.grep(/^[a-z]/).first}*.rb"].sort
       load benchmark
       bm.report File.basename(benchmark)[/\Abm_(.*?)\.rb/, 1] do
         Bench.run
