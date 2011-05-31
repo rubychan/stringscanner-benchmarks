@@ -1,9 +1,7 @@
-require 'strscan/multi_thread_benchmark'
+require 'multi_thread_bench'
 
-class << MultiThreadBenchmark.new('multi')
-  def each_chunk
-    input.lines.each_slice chunk_size do |lines|
-      yield lines.join
-    end
+MultiThreadBench.new do |input, chunk_size, &encode|
+  input.lines.each_slice chunk_size do |lines|
+    encode[lines.join]
   end
 end

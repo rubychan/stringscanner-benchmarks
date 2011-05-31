@@ -1,4 +1,4 @@
-def Bench.run
+Bench.new do
   string = "string\n"
   scanner = StringScanner.new string
   regexp = /(?!)/

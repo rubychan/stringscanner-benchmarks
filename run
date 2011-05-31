@@ -6,25 +6,27 @@ require 'strscan'
 MY_DIR = File.dirname(__FILE__)
 $LOAD_PATH.unshift MY_DIR
 
-class Bench
-  def run
-    # define benchmark here
-  end
-  def info
-    # define additional information to be printed after the benchmark here
-  end
-end
+require 'bench'
+
+times  = (ARGV.join(' ')[/--times (\d+)/, 1] || 1).to_i
+repeat = (ARGV.join(' ')[/--repeat (\d+)/, 1] || 1).to_i
 
 Benchmark.bm 30 do |bm|
   Dir.chdir MY_DIR do
-    for benchmark in Dir["strscan/**/bm_#{ARGV.grep(/^[a-z]/).first}*.rb"].sort
+    for benchmark in Dir["strscan/**/bm_#{ARGV.grep(/^[a-z]/).first || '*'}.rb"].sort
       load benchmark
-      bm.report File.basename(benchmark)[/\Abm_(.*?)\.rb/, 1] do
-        (ARGV.join(' ')[/--times (\d+)/, 1] || 1).to_i.times do
-          Bench.run
+      bench = Bench.last_instance
+      name = File.basename(benchmark)[/\Abm_(.*?)\.rb/, 1]
+      
+      bench.before
+      repeat.times do |i|
+        bm.report name + ":#{i + 1 if repeat > 1}" do
+          times.times do
+            bench.run
+          end
         end
       end
-      Bench.info
+      bench.after
       puts
     end
   end
